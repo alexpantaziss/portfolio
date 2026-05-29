@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alexandros Pantazis — Project Manager &amp; GIS Analyst</title>
+<meta name="description" content="Alexandros Pantazis — MSc Environment Engineer, Project Manager and GIS Analyst specializing in remote sensing, the water-energy nexus, and renewable energy systems." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ============ DESIGN TOKENS — Swiss Modernism 2.0 ============ */
+  :root {
+    --color-primary: #18181B;
+    --color-on-primary: #FFFFFF;
+    --color-secondary: #3F3F46;
+    --color-accent: #2563EB;
+    --color-accent-hover: #1D4ED8;
+    --color-background: #FAFAFA;
+    --color-surface: #FFFFFF;
+    --color-foreground: #09090B;
+    --color-muted-fg: #52525B;
+    --color-muted: #E8ECF0;
+    --color-border: #E4E4E7;
+    --color-ring: #18181B;
+
+    --font-head: "Poppins", system-ui, sans-serif;
+    --font-body: "Open Sans", system-ui, sans-serif;
+
+    /* 8pt spacing rhythm */
+    --space-1: 0.5rem;  --space-2: 1rem;   --space-3: 1.5rem;
+    --space-4: 2rem;    --space-6: 3rem;   --space-8: 4rem;
+    --space-12: 6rem;   --space-16: 8rem;
+
+    --maxw: 1200px;
+    --radius: 4px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-sm: 0 1px 2px rgba(9,9,11,.05);
+    --shadow-md: 0 4px 16px rgba(9,9,11,.08);
+    --shadow-lg: 0 16px 48px rgba(9,9,11,.12);
+  }
+  [data-theme="dark"] {
+    --color-primary: #FAFAFA;
+    --color-on-primary: #09090B;
+    --color-secondary: #A1A1AA;
+    --color-accent: #60A5FA;
+    --color-accent-hover: #93C5FD;
+    --color-background: #09090B;
+    --color-surface: #18181B;
+    --color-foreground: #FAFAFA;
+    --color-muted-fg: #A1A1AA;
+    --color-muted: #27272A;
+    --color-border: #27272A;
+    --color-ring: #FAFAFA;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    --shadow-lg: 0 16px 48px rgba(0,0,0,.6);
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+  body {
+    font-family: var(--font-body);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .4s var(--ease), color .4s var(--ease);
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+  :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* ============ LAYOUT ============ */
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--space-3); }
+  .section { padding: var(--space-12) 0; border-top: 1px solid var(--color-border); }
+  .section--plain { border-top: none; }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: var(--font-head); font-weight: 600;
+    font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--color-muted-fg);
+  }
+  .eyebrow .num { color: var(--color-accent); font-variant-numeric: tabular-nums; }
+  .section-head { margin-bottom: var(--space-6); max-width: 760px; }
+  .section-head h2 {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.1;
+    letter-spacing: -.02em; margin-top: var(--space-2);
+  }
+  .section-head p { color: var(--color-muted-fg); margin-top: var(--space-2); font-size: 1.05rem; max-width: 65ch; }
+
+  /* ============ HEADER / NAV ============ */
+  header.nav {
+    position: sticky; top: 0; z-index: 100;
+    background: color-mix(in srgb, var(--color-background) 86%, transparent);
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .brand { display: flex; align-items: center; gap: .7rem; font-family: var(--font-head); font-weight: 700; letter-spacing: -.01em; font-size: 1.05rem; }
+  .brand .mark {
+    width: 34px; height: 34px; border-radius: var(--radius);
+    background: var(--color-primary); color: var(--color-on-primary);
+    display: grid; place-items: center; font-weight: 700; font-size: .9rem; letter-spacing: -.03em;
+  }
+  .nav-links { display: flex; align-items: center; gap: var(--space-3); }
+  .nav-links a {
+    font-size: .9rem; font-weight: 500; color: var(--color-muted-fg);
+    position: relative; padding: .4rem 0; transition: color .2s var(--ease);
+  }
+  .nav-links a::after {
+    content: ""; position: absolute; left: 0; bottom: -2px; height: 2px; width: 0;
+    background: var(--color-accent); transition: width .25s var(--ease);
+  }
+  .nav-links a:hover { color: var(--color-foreground); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-actions { display: flex; align-items: center; gap: var(--space-1); }
+  .icon-btn {
+    width: 44px; height: 44px; display: grid; place-items: center;
+    background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius);
+    color: var(--color-foreground); cursor: pointer; transition: background .2s var(--ease), border-color .2s var(--ease);
+  }
+  .icon-btn:hover { background: var(--color-muted); }
+  .icon-btn svg { width: 20px; height: 20px; }
+  [data-theme="dark"] .sun { display: block; } [data-theme="dark"] .moon { display: none; }
+  .sun { display: none; } .moon { display: block; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: .55rem; cursor: pointer;
+    font-family: var(--font-head); font-weight: 600; font-size: .9rem;
+    padding: .7rem 1.25rem; border-radius: var(--radius); border: 1px solid transparent;
+    min-height: 44px; transition: transform .15s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .btn svg { width: 18px; height: 18px; }
+  .btn-primary { background: var(--color-accent); color: #fff; }
+  .btn-primary:hover { background: var(--color-accent-hover); box-shadow: var(--shadow-md); }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-ghost { background: transparent; border-color: var(--color-border); color: var(--color-foreground); }
+  .btn-ghost:hover { background: var(--color-muted); }
+  .menu-toggle { display: none; }
+
+  /* ============ HERO ============ */
+  .hero { padding: var(--space-12) 0 var(--space-8); position: relative; overflow: hidden; }
+  .hero-grid-bg {
+    position: absolute; inset: 0; z-index: 0; opacity: .5; pointer-events: none;
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 70% at 70% 0%, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 70% 0%, #000 30%, transparent 75%);
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero-status {
+    display: inline-flex; align-items: center; gap: .55rem;
+    font-size: .8rem; font-weight: 600; letter-spacing: .04em;
+    padding: .4rem .85rem; border: 1px solid var(--color-border); border-radius: 100px;
+    background: var(--color-surface); color: var(--color-muted-fg); box-shadow: var(--shadow-sm);
+  }
+  .hero-status .dot { width: 8px; height: 8px; border-radius: 50%; background: #16A34A; box-shadow: 0 0 0 0 rgba(22,163,74,.5); animation: pulse 2.4s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(22,163,74,.5);} 70%{box-shadow:0 0 0 8px rgba(22,163,74,0);} 100%{box-shadow:0 0 0 0 rgba(22,163,74,0);} }
+  .hero h1 {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 5.2rem); line-height: 1.02; letter-spacing: -.035em;
+    margin: var(--space-3) 0 var(--space-2);
+  }
+  .hero h1 .accent { color: var(--color-accent); }
+  .hero .role {
+    font-family: var(--font-head); font-weight: 500;
+    font-size: clamp(1.1rem, 2.6vw, 1.6rem); color: var(--color-secondary); letter-spacing: -.01em;
+  }
+  .hero .lede { margin-top: var(--space-3); max-width: 60ch; font-size: 1.1rem; color: var(--color-muted-fg); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+
+  /* hero stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); margin-top: var(--space-8); }
+  .stat { border-left: 2px solid var(--color-accent); padding-left: var(--space-2); }
+  .stat .v { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: .82rem; color: var(--color-muted-fg); margin-top: .2rem; line-height: 1.35; }
+
+  /* ============ ABOUT ============ */
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--space-8); align-items: start; }
+  .about-grid .lead { font-family: var(--font-head); font-weight: 500; font-size: clamp(1.3rem,2.4vw,1.7rem); line-height: 1.35; letter-spacing: -.01em; }
+  .about-grid .body p { color: var(--color-muted-fg); margin-bottom: var(--space-2); font-size: 1.02rem; }
+  .about-grid .body p:last-child { margin-bottom: 0; }
+  .focus-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: var(--space-3); }
+  .tag {
+    font-size: .8rem; font-weight: 600; padding: .35rem .7rem; border-radius: 100px;
+    background: var(--color-muted); color: var(--color-secondary);
+  }
+
+  /* ============ PROJECTS ============ */
+  .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: var(--space-4); }
+  .chip {
+    font-family: var(--font-head); font-weight: 500; font-size: .85rem; cursor: pointer;
+    padding: .5rem 1rem; border-radius: 100px; min-height: 40px;
+    background: var(--color-surface); color: var(--color-secondary);
+    border: 1px solid var(--color-border); transition: all .2s var(--ease);
+  }
+  .chip:hover { border-color: var(--color-foreground); color: var(--color-foreground); }
+  .chip[aria-pressed="true"] { background: var(--color-primary); color: var(--color-on-primary); border-color: var(--color-primary); }
+
+  .proj-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-3); }
+  .card {
+    grid-column: span 6; display: flex; flex-direction: column;
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius);
+    overflow: hidden; transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+  }
+  .card.feature { grid-column: span 12; }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border)); }
+  .card-visual {
+    height: 180px; position: relative; overflow: hidden;
+    background: var(--color-primary); color: var(--color-on-primary);
+    display: flex; align-items: flex-end; padding: var(--space-3);
+  }
+  .card.feature .card-visual { height: 240px; }
+  .card-visual .grain {
+    position: absolute; inset: 0; opacity: .9;
+    background:
+      radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--color-accent) 55%, transparent), transparent 55%),
+      linear-gradient(135deg, #18181B 0%, #27272A 100%);
+  }
+  [data-theme="dark"] .card-visual .grain { background: radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--color-accent) 35%, transparent), transparent 55%), linear-gradient(135deg, #000 0%, #18181B 100%); }
+  .card-visual .lines {
+    position: absolute; inset: 0; opacity: .25;
+    background-image: linear-gradient(rgba(255,255,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.4) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .card-visual .vlabel { position: relative; z-index: 1; }
+  .card-visual .vlabel .ico { width: 34px; height: 34px; margin-bottom: .5rem; opacity: .9; }
+  .card-visual .vlabel .metric { font-family: var(--font-head); font-weight: 700; font-size: 2rem; line-height: 1; letter-spacing: -.02em; }
+  .card-visual .vlabel .metric small { font-size: .85rem; font-weight: 500; opacity: .8; display: block; letter-spacing: 0; margin-top: .25rem; }
+  .card-cat {
+    position: absolute; top: var(--space-2); left: var(--space-3); z-index: 1;
+    font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    padding: .3rem .6rem; border-radius: 100px; background: rgba(255,255,255,.14); color: #fff;
+    backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.2);
+  }
+  .card-body { padding: var(--space-3); display: flex; flex-direction: column; flex: 1; }
+  .card-body h3 { font-family: var(--font-head); font-weight: 600; font-size: 1.2rem; letter-spacing: -.01em; line-height: 1.25; }
+  .card.feature .card-body h3 { font-size: 1.45rem; }
+  .card-body p { color: var(--color-muted-fg); font-size: .96rem; margin-top: .6rem; flex: 1; }
+  .card-meta { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: var(--space-2); }
+  .card-meta span { font-size: .74rem; font-weight: 600; color: var(--color-secondary); background: var(--color-muted); padding: .25rem .55rem; border-radius: var(--radius); }
+
+  /* ============ TIMELINE / EXPERIENCE ============ */
+  .timeline { position: relative; }
+  .tl-item { display: grid; grid-template-columns: 220px 1fr; gap: var(--space-4); padding: var(--space-4) 0; border-top: 1px solid var(--color-border); }
+  .tl-item:first-child { border-top: none; }
+  .tl-when { font-family: var(--font-head); }
+  .tl-when .org { font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; }
+  .tl-when .date { color: var(--color-muted-fg); font-size: .85rem; margin-top: .25rem; font-variant-numeric: tabular-nums; }
+  .tl-when .badge-now { display: inline-block; margin-top: .5rem; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-accent); }
+  .tl-body h3 { font-family: var(--font-head); font-weight: 600; font-size: 1.25rem; letter-spacing: -.01em; }
+  .tl-body ul { margin-top: var(--space-2); display: grid; gap: .6rem; }
+  .tl-body li { position: relative; padding-left: 1.4rem; color: var(--color-muted-fg); font-size: .98rem; }
+  .tl-body li::before { content: ""; position: absolute; left: 0; top: .55em; width: 7px; height: 7px; border-radius: 1px; background: var(--color-accent); transform: rotate(45deg); }
+
+  /* ============ EU PROJECTS + CONFERENCES ============ */
+  .list-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+  .li-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-3); transition: border-color .2s var(--ease), box-shadow .2s var(--ease); }
+  .li-card:hover { border-color: var(--color-foreground); box-shadow: var(--shadow-sm); }
+  .li-card .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .li-card h3 { font-family: var(--font-head); font-weight: 600; font-size: 1.1rem; letter-spacing: -.01em; }
+  .li-card .ga { font-size: .72rem; font-weight: 600; color: var(--color-muted-fg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .li-card p { color: var(--color-muted-fg); font-size: .92rem; margin-top: .5rem; }
+  .li-card .status { display: inline-block; margin-top: .6rem; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #B45309; background: #FEF3C7; padding: .2rem .5rem; border-radius: var(--radius); }
+  [data-theme="dark"] .li-card .status { color: #FCD34D; background: #422006; }
+
+  .conf-list { display: grid; gap: 0; }
+  .conf {
+    display: grid; grid-template-columns: 48px 1fr auto; gap: var(--space-3); align-items: center;
+    padding: var(--space-3) 0; border-top: 1px solid var(--color-border);
+  }
+  .conf:first-child { border-top: none; }
+  .conf .idx { font-family: var(--font-head); font-weight: 700; font-size: 1.1rem; color: var(--color-accent); font-variant-numeric: tabular-nums; }
+  .conf .title { font-weight: 600; font-size: 1.02rem; }
+  .conf .title em { color: var(--color-muted-fg); font-style: italic; font-weight: 400; }
+  .conf .venue { color: var(--color-muted-fg); font-size: .9rem; margin-top: .15rem; }
+  .conf .yr { font-family: var(--font-head); font-weight: 600; font-size: .85rem; color: var(--color-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* ============ SKILLS + EDUCATION ============ */
+  .two-col { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--space-8); align-items: start; }
+  .skill-group { margin-bottom: var(--space-4); }
+  .skill-group:last-child { margin-bottom: 0; }
+  .skill-group h4 { font-family: var(--font-head); font-weight: 600; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--color-muted-fg); margin-bottom: var(--space-2); }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .skill-tags span { font-size: .88rem; font-weight: 500; padding: .45rem .8rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); transition: border-color .2s var(--ease); }
+  .skill-tags span:hover { border-color: var(--color-accent); }
+
+  .edu-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-3); margin-bottom: var(--space-2); }
+  .edu-card:last-child { margin-bottom: 0; }
+  .edu-card .deg { font-family: var(--font-head); font-weight: 600; font-size: 1.05rem; letter-spacing: -.01em; }
+  .edu-card .school { color: var(--color-accent); font-weight: 600; font-size: .92rem; margin-top: .2rem; }
+  .edu-card .meta { display: flex; justify-content: space-between; gap: 1rem; color: var(--color-muted-fg); font-size: .85rem; margin-top: .5rem; font-variant-numeric: tabular-nums; }
+  .edu-card .grade { font-weight: 700; color: var(--color-foreground); }
+  .edu-card .thesis { font-size: .9rem; color: var(--color-muted-fg); margin-top: .6rem; font-style: italic; border-left: 2px solid var(--color-border); padding-left: .75rem; }
+
+  /* ============ CONTACT / FOOTER ============ */
+  footer { background: var(--color-primary); color: var(--color-on-primary); }
+  footer .wrap { padding-top: var(--space-12); padding-bottom: var(--space-6); }
+  .cta-block { max-width: 720px; }
+  .cta-block .eyebrow { color: color-mix(in srgb, var(--color-on-primary) 60%, transparent); }
+  .cta-block h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.05; letter-spacing: -.03em; margin: var(--space-2) 0 var(--space-3); }
+  .cta-block p { color: color-mix(in srgb, var(--color-on-primary) 72%, transparent); font-size: 1.1rem; max-width: 55ch; }
+  .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); margin-top: var(--space-6); }
+  .contact-card {
+    display: flex; align-items: center; gap: var(--space-2);
+    padding: var(--space-3); border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--color-on-primary) 16%, transparent);
+    transition: background .2s var(--ease), transform .2s var(--ease);
+  }
+  .contact-card:hover { background: color-mix(in srgb, var(--color-on-primary) 8%, transparent); transform: translateY(-2px); }
+  .contact-card .ci { width: 42px; height: 42px; flex: none; border-radius: var(--radius); display: grid; place-items: center; background: color-mix(in srgb, var(--color-on-primary) 12%, transparent); }
+  .contact-card .ci svg { width: 20px; height: 20px; }
+  .contact-card .k { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: color-mix(in srgb, var(--color-on-primary) 55%, transparent); }
+  .contact-card .val { font-family: var(--font-head); font-weight: 600; font-size: .98rem; word-break: break-word; }
+  .foot-bottom {
+    display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; justify-content: space-between;
+    margin-top: var(--space-8); padding-top: var(--space-3);
+    border-top: 1px solid color-mix(in srgb, var(--color-on-primary) 16%, transparent);
+    color: color-mix(in srgb, var(--color-on-primary) 60%, transparent); font-size: .85rem;
+  }
+  .foot-bottom .langs { display: flex; gap: var(--space-3); }
+
+  /* reveal-on-scroll */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .about-grid, .two-col { grid-template-columns: 1fr; gap: var(--space-4); }
+    .stats { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    .tl-item { grid-template-columns: 1fr; gap: var(--space-2); }
+    .list-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .card, .card.feature { grid-column: span 12; }
+    .nav-links { display: none; }
+    .menu-toggle { display: grid; }
+    .nav-links.open {
+      display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2);
+      position: absolute; top: 72px; left: 0; right: 0; padding: var(--space-3);
+      background: var(--color-background); border-bottom: 1px solid var(--color-border); box-shadow: var(--shadow-md);
+    }
+    .hero-cta .btn { flex: 1; justify-content: center; }
+    .conf { grid-template-columns: 32px 1fr; }
+    .conf .yr { grid-column: 2; }
+  }
+  @media (max-width: 420px) {
+    .stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand" aria-label="Alexandros Pantazis — home">
+      <span class="mark">AP</span>
+      <span>Alexandros&nbsp;Pantazis</span>
+    </a>
+    <nav class="nav-links" id="navlinks" aria-label="Primary">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#eu">EU&nbsp;Projects</a>
+      <a href="#conferences">Talks</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ========== HERO ========== -->
+  <section class="hero section--plain">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="hero-status"><span class="dot" aria-hidden="true"></span> Open to project &amp; GIS collaborations</span>
+      <h1>Mapping the<br><span class="accent">climate crisis</span> into action.</h1>
+      <p class="role">Project Manager &amp; GIS Analyst · MSc Environment Engineer</p>
+      <p class="lede">I use GIS and remote sensing to solve real environmental problems — urban heat, air quality, fire risk and transport logistics — and bring those same tools into classrooms across Greece and Cyprus, while managing EU-funded projects from €400K to €1.5M.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#projects">View featured projects
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="mailto:pantazisalex@outlook.com">Get in touch
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+      </div>
+
+      <div class="stats reveal">
+        <div class="stat"><div class="v">€1.5M</div><div class="l">Max EU project budget managed</div></div>
+        <div class="stat"><div class="v">100+</div><div class="l">Teachers trained in geospatial tools</div></div>
+        <div class="stat"><div class="v">33.4%</div><div class="l">Fleet reduction in routing model</div></div>
+        <div class="stat"><div class="v">N=450</div><div class="l">Sample in competence study</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="about-grid reveal">
+        <div>
+          <span class="eyebrow"><span class="num">01</span> / Profile</span>
+          <p class="lead" style="margin-top: var(--space-2)">Geospatial science meets education — engineering at the intersection of data and the planet.</p>
+          <div class="focus-tags">
+            <span class="tag">Remote Sensing</span>
+            <span class="tag">Water–Energy Nexus</span>
+            <span class="tag">Renewable Energy</span>
+            <span class="tag">Spatial Analysis</span>
+            <span class="tag">Project Management</span>
+          </div>
+        </div>
+        <div class="body">
+          <p>I'm an environmental engineer and educational researcher working at the intersection of geospatial science and education. My work pairs strong technical GIS skills with hands-on management of substantial EU-funded research projects.</p>
+          <p>From heat-vulnerability mapping for the Municipality of Athens to optimizing school-bus fleets and building real-time air-quality observatories, I turn satellite data and spatial models into decisions that protect people and the environment.</p>
+          <p>I'm also an active presenter at ArcGIS and remote-sensing conferences, and I design pedagogical frameworks that put these same tools into the hands of teachers and students across Greece and Cyprus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROJECTS ========== -->
+  <section class="section" id="projects">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow"><span class="num">02</span> / Portfolio</span>
+        <h2>Featured GIS projects</h2>
+        <p>Selected work spanning thermal risk modelling, route optimization, and operational web-GIS — built with ArcGIS Pro, Network Analyst, Google Earth Engine and live environmental data.</p>
+      </div>
+
+      <div class="filters reveal" role="group" aria-label="Filter projects by category">
+        <button class="chip" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" data-filter="heat" aria-pressed="false">Heat &amp; Climate</button>
+        <button class="chip" data-filter="optimization" aria-pressed="false">Optimization</button>
+        <button class="chip" data-filter="webgis" aria-pressed="false">Web GIS</button>
+        <button class="chip" data-filter="visualization" aria-pressed="false">Visualization</button>
+      </div>
+
+      <div class="proj-grid">
+
+        <!-- Feature: Air Quality Observatory -->
+        <article class="card feature reveal" data-cat="webgis">
+          <div class="card-visual">
+            <span class="card-cat">Web GIS · Award Entry</span>
+            <span class="grain" aria-hidden="true"></span><span class="lines" aria-hidden="true"></span>
+            <div class="vlabel">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3 8 4-16 3 8h6"/></svg>
+              <div class="metric">EAQI<small>Real-time air quality for schools · GR &amp; CY</small></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>Air Quality Observatory for Greek &amp; Cypriot Schools</h3>
+            <p>A Web GIS application monitoring real-time air quality across educational institutions in Greece and Cyprus. Built on Copernicus (CAMS) and Open-Meteo data, it surfaces the European Air Quality Index and key pollutants (PM2.5, PM10, NO₂, O₃), with five-day history and forecast so educators can safely plan outdoor activities — plus automated PDF reports and social sharing. Created for the ADONIS TICKET competition, in memory of Adonis, founder of Marathon Data Systems.</p>
+            <div class="card-meta"><span>CAMS / Open-Meteo</span><span>EAQI</span><span>5-day forecast</span><span>PDF reports</span></div>
+          </div>
+        </article>
+
+        <!-- HVI Athens -->
+        <article class="card reveal" data-cat="heat">
+          <div class="card-visual">
+            <span class="card-cat">Heat &amp; Climate</span>
+            <span class="grain" aria-hidden="true"></span><span class="lines" aria-hidden="true"></span>
+            <div class="vlabel">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8M12 14a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0 0V10"/><path d="M8 6h8"/></svg>
+              <div class="metric">HVI<small>Environmental + socio-economic</small></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>Heat Vulnerability Index — Athens Municipality</h3>
+            <p>Evolved a Heat Risk Index into a full Heat Vulnerability Index (HVI), integrating environmental data with socio-economic factors to pinpoint high-risk neighborhoods across the municipality.</p>
+            <div class="card-meta"><span>ArcGIS Pro</span><span>Multicriteria</span></div>
+          </div>
+        </article>
+
+        <!-- HRI Attica -->
+        <article class="card reveal" data-cat="heat">
+          <div class="card-visual">
+            <span class="card-cat">Heat &amp; Climate</span>
+            <span class="grain" aria-hidden="true"></span><span class="lines" aria-hidden="true"></span>
+            <div class="vlabel">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+              <div class="metric">20×20m<small>Landsat 8 + Sentinel-2</small></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>Heat Risk Index — Attica Peninsula</h3>
+            <p>A localized HRI built in ArcGIS Pro analyzing Landsat 8 and Sentinel-2 imagery at 20×20m resolution alongside population density, revealing thermal hotspots in Central Athens.</p>
+            <div class="card-meta"><span>Landsat 8</span><span>Sentinel-2</span><span>Remote Sensing</span></div>
+          </div>
+        </article>
+
+        <!-- GEE HRI Calculator -->
+        <article class="card reveal" data-cat="heat">
+          <div class="card-visual">
+            <span class="card-cat">Heat &amp; Climate</span>
+            <span class="grain" aria-hidden="true"></span><span class="lines" aria-hidden="true"></span>
+            <div class="vlabel">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.8 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.8-3.8-9S9.5 5.5 12 3Z"/></svg>
+              <div class="metric">N. Hemisphere<small>Automated GEE workflow</small></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>Heat Risk Index Calculator — Northern Hemisphere</h3>
+            <p>A Google Earth Engine project that automates the full Heat Risk Index workflow, returning a classified raster for any location across the Northern Hemisphere.</p>
+            <div class="card-meta"><span>Google Earth Engine</span><span>Automation</span></div>
+          </div>
+        </article>
+
+        <!-- School Bus Routing -->
+        <article class="card reveal" data-cat="optimization">
+          <div class="card-visual">
+            <span class="card-cat">Optimization · MSc Thesis</span>
+            <span class="grain" aria-hidden="true"></span><span class="lines" aria-hidden="true"></span>
+            <div class="vlabel">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10"/><path d="M4 16h16M7 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>
+              <div class="metric">−33.4%<small>Fleet requirement · −20% CO₂</small></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>School Bus Routing Optimization</h3>
+            <p>An automated routing model (fleet size N=106) built with ArcGIS Network Analyst and ModelBuilder. Achieved a 33.4% reduction in fleet requirements, 20% lower CO₂ emissions, and savings of €96.6 per fleet route.</p>
+            <div class="card-meta"><span>Network Analyst</span><span>ModelBuilder</span><span>N=106</span></div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Smaller projects -->
+      <div class="section-head reveal" style="margin-top: var(--space-8)">
+        <h2 style="font-size: clamp(1.3rem,3vw,1.7rem)">Smaller projects &amp; highlights</h2>
+      </div>
+      <div class="proj-grid">
+        <article class="card reveal" data-cat="visualization" style="grid-column: span 4;">
+          <div class="card-body">
+            <h3 style="font-size:1.1rem">Municipal Geodatabase</h3>
+            <p>Development of a structured, query-ready geodatabase for a municipality.</p>
+          </div>
+        </article>
+        <article class="card reveal" data-cat="visualization" style="grid-column: span 4;">
+          <div class="card-body">
+            <h3 style="font-size:1.1rem">National Garden of Athens</h3>
+            <p>A 3D, designed visualization of the historic National Garden.</p>
+          </div>
+        </article>
+        <article class="card reveal" data-cat="visualization" style="grid-column: span 4;">
+          <div class="card-body">
+            <h3 style="font-size:1.1rem">Fire Incidents App</h3>
+            <p>Application visualizing the biggest fire incidents over recent years.</p>
+          </div>
+        </article>
+        <article class="card reveal" data-cat="visualization" style="grid-column: span 4;">
+          <div class="card-body">
+            <h3 style="font-size:1.1rem">ArcGIS Workflows for Climate Change</h3>
+            <p>Presentations on GIS workflows for climate resilience, adaptation and disaster response (MSc, Univ. of Piraeus).</p>
+          </div>
+        </article>
+        <article class="card reveal" data-cat="visualization" style="grid-column: span 4;">
+          <div class="card-body">
+            <h3 style="font-size:1.1rem">Attica Region Poster</h3>
+            <p>A custom decorative cartographic poster of the Attica region.</p>
+          </div>
+        </article>
+        <article class="card reveal" data-cat="visualization" style="grid-column: span 4;">
+          <div class="card-body">
+            <h3 style="font-size:1.1rem">Conference Cartography</h3>
+            <p>Presented at ArcGIS User Conference 2024 &amp; 2025 and Hellas GIS.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== EXPERIENCE ========== -->
+  <section class="section" id="experience">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow"><span class="num">03</span> / Career</span>
+        <h2>Professional experience</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-when">
+            <div class="org">Ellinogermaniki Agogi</div>
+            <div class="date">Jan 2024 — Present</div>
+            <span class="badge-now">● Current</span>
+          </div>
+          <div class="tl-body">
+            <h3>Educational Researcher</h3>
+            <ul>
+              <li>Co-develop pedagogical frameworks for integrating geospatial technologies and GIS tools into secondary-education curricula.</li>
+              <li>Designed and executed a study (N=450) evaluating green &amp; digital competence development through pre/post-implementation analysis.</li>
+              <li>Manage European projects (€400K – €1.5M total) focused on geospatial skills and green &amp; digital competences for teachers and students.</li>
+              <li>Trained 100+ teachers through hands-on workshops, professional development courses, seminars and summer schools.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-when">
+            <div class="org">HEDNO</div>
+            <div class="date">Jan 2023 — Dec 2023</div>
+          </div>
+          <div class="tl-body">
+            <h3>Field Engineer</h3>
+            <ul>
+              <li>Operated mobile mapper and GNSS systems to accurately map the energy network.</li>
+              <li>Generated point-cloud data and compiled daily progress reports for stakeholders.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-when">
+            <div class="org">Dept. of Civil Protection &amp; Environment</div>
+            <div class="date">Jun 2021 — Dec 2021</div>
+          </div>
+          <div class="tl-body">
+            <h3>Intern</h3>
+            <ul>
+              <li>Monitored fire-protection measures and visualized operational workflows using GIS tools.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== EU PROJECTS ========== -->
+  <section class="section" id="eu">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow"><span class="num">04</span> / Funded research</span>
+        <h2>EU-funded projects</h2>
+        <p>Managed and contributed to Erasmus+ and Horizon-aligned initiatives bringing geospatial and green-digital competences into European schools.</p>
+      </div>
+      <div class="list-grid">
+        <div class="li-card reveal">
+          <div class="top"><h3>GEO-Academy</h3><span class="ga">GA 101104693</span></div>
+          <p>Teacher Academy for digital and geospatial skills in sustainable-development education.</p>
+        </div>
+        <div class="li-card reveal">
+          <div class="top"><h3>Synapses Academy</h3><span class="ga">GA 101102346</span></div>
+          <p>Teacher Academy for sustainability-citizenship training of teachers and school heads.</p>
+        </div>
+        <div class="li-card reveal">
+          <div class="top"><h3>STEMMOS</h3><span class="ga">KA220-SCH</span></div>
+          <p>KA2 project on satellite observation of Earth, Moon and Mars in schools.</p>
+        </div>
+        <div class="li-card reveal">
+          <div class="top"><h3>Eco² Schools — NEB Labs</h3><span class="ga">GA 0108692</span></div>
+          <p>Transforming schools into climate-neutral innovation hubs through eco-renovation and education.</p>
+        </div>
+        <div class="li-card reveal">
+          <div class="top"><h3>Discovery Trail</h3><span class="ga">KA220-SCH</span></div>
+          <p>KA2 outdoor digital-learning tool for understanding environmental complexity.</p>
+        </div>
+        <div class="li-card reveal">
+          <div class="top"><h3>EnvoSAT</h3><span class="ga">KA2</span></div>
+          <p>Monitoring the environment through satellite data in schools.</p>
+          <span class="status">Under review</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONFERENCES ========== -->
+  <section class="section" id="conferences">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow"><span class="num">05</span> / Speaking</span>
+        <h2>Conference presentations</h2>
+      </div>
+      <div class="conf-list">
+        <div class="conf reveal">
+          <span class="idx">01</span>
+          <div><div class="title"><em>When students act as urban redesigners: detecting Urban Heat Islands in Cyprus</em></div><div class="venue">GEO-Academy Conference 2025</div></div>
+          <span class="yr">Nov 2025</span>
+        </div>
+        <div class="conf reveal">
+          <span class="idx">02</span>
+          <div><div class="title"><em>School Bus Routing Optimization using GIS</em></div><div class="venue">ArcGIS Greece–Cyprus Users Meeting 2025</div></div>
+          <span class="yr">Oct 2025</span>
+        </div>
+        <div class="conf reveal">
+          <span class="idx">03</span>
+          <div><div class="title"><em>GIS Application for Fire Risk Assessment</em> · with M. Chatzigeorgiades</div><div class="venue">ArcGIS Greece–Cyprus Users Meeting 2024</div></div>
+          <span class="yr">Oct 2024</span>
+        </div>
+        <div class="conf reveal">
+          <span class="idx">04</span>
+          <div><div class="title"><em>From Zero to Hero through ESRI's MOOC: HVI for the Municipality of Athens</em> · with E. Vlachou</div><div class="venue">Esri Imagery &amp; Remote Sensing Educators Summit</div></div>
+          <span class="yr">May 2024</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SKILLS + EDUCATION ========== -->
+  <section class="section" id="skills">
+    <div class="wrap">
+      <div class="two-col">
+        <div class="reveal">
+          <div class="section-head" style="margin-bottom: var(--space-4)">
+            <span class="eyebrow"><span class="num">06</span> / Toolkit</span>
+            <h2 style="font-size: clamp(1.6rem,3vw,2.2rem)">Skills</h2>
+          </div>
+          <div class="skill-group">
+            <h4>GIS &amp; Remote Sensing</h4>
+            <div class="skill-tags">
+              <span>Network Analyst</span><span>ModelBuilder</span><span>Spatial Analysis</span>
+              <span>Multicriteria Analysis</span><span>ArcGIS Online</span><span>ArcGIS Pro</span>
+              <span>QGIS</span><span>Google Earth Engine</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4>Programming</h4>
+            <div class="skill-tags"><span>Python (basic)</span></div>
+          </div>
+          <div class="skill-group">
+            <h4>Other Tools</h4>
+            <div class="skill-tags"><span>AutoCAD 2D</span><span>Canva</span><span>Inkscape</span><span>LaTeX</span></div>
+          </div>
+          <div class="skill-group">
+            <h4>Project Management</h4>
+            <div class="skill-tags"><span>RACI Charts</span><span>SWOT</span><span>Budgeting</span><span>Agile</span><span>Waterfall</span></div>
+          </div>
+          <div class="skill-group">
+            <h4>Languages</h4>
+            <div class="skill-tags"><span>English — C2</span><span>Greek — Native</span></div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head" style="margin-bottom: var(--space-4)">
+            <h2 style="font-size: clamp(1.6rem,3vw,2.2rem)">Education</h2>
+          </div>
+          <div class="edu-card">
+            <div class="deg">MSc — Climate Crisis &amp; ICT</div>
+            <div class="school">University of Piraeus</div>
+            <div class="meta"><span>10/2023 – 06/2025</span><span class="grade">9.34 / 10</span></div>
+            <p class="thesis">Optimization of School Bus Routing using GIS and calculation of economic and environmental benefits.</p>
+          </div>
+          <div class="edu-card">
+            <div class="deg">BSc — Natural Resources &amp; Environment Engineering</div>
+            <div class="school">Hellenic Mediterranean University</div>
+            <div class="meta"><span>10/2017 – 02/2022</span><span class="grade">8.65 / 10</span></div>
+          </div>
+          <div class="edu-card">
+            <div class="deg">Foundations of Project Management</div>
+            <div class="school">Coursera / Google</div>
+            <div class="meta"><span>10/2022 · ~100 hours</span></div>
+            <p class="thesis" style="font-style:normal">RACI Charts, SWOT Analysis, Budgeting, Agile &amp; Waterfall management.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========== CONTACT / FOOTER ========== -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="cta-block reveal">
+      <span class="eyebrow"><span class="num" style="color: var(--color-accent)">07</span> / Contact</span>
+      <h2>Let's map the next problem worth solving.</h2>
+      <p>Available for GIS analysis, remote-sensing projects, and EU project management collaborations. Reach out — I usually reply within a day.</p>
+    </div>
+    <div class="contact-grid reveal">
+      <a class="contact-card" href="mailto:pantazisalex@outlook.com">
+        <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></span>
+        <span><span class="k">Email</span><br><span class="val">pantazisalex@outlook.com</span></span>
+      </a>
+      <a class="contact-card" href="tel:+306940982533">
+        <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg></span>
+        <span><span class="k">Phone</span><br><span class="val">(+30) 694 098 2533</span></span>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com" target="_blank" rel="noopener">
+        <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14ZM8.3 18V10H5.8v8h2.5ZM7 8.9a1.45 1.45 0 1 0 0-2.9 1.45 1.45 0 0 0 0 2.9ZM18.2 18v-4.4c0-2.35-1.25-3.45-2.93-3.45-1.35 0-1.96.74-2.3 1.27V10h-2.5v8h2.5v-4.45c0-.24.02-.47.09-.64.18-.47.62-.96 1.34-.96.95 0 1.33.72 1.33 1.78V18h2.47Z"/></svg></span>
+        <span><span class="k">LinkedIn</span><br><span class="val">Connect with me</span></span>
+      </a>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Alexandros Pantazis · MSc Environment Engineer &amp; Researcher</span>
+      <span class="langs"><span>EN — C2</span><span>EL — Native</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    // ---- Theme: respect stored choice, else system preference ----
+    var root = document.documentElement;
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
+
+    var toggle = document.getElementById('themeToggle');
+    toggle.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    // ---- Mobile menu ----
+    var menuBtn = document.getElementById('menuToggle');
+    var links = document.getElementById('navlinks');
+    menuBtn.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') { links.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+    });
+
+    // ---- Project filter ----
+    var chips = document.querySelectorAll('.chip');
+    var cards = document.querySelectorAll('.proj-grid .card[data-cat]');
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+        chip.setAttribute('aria-pressed', 'true');
+        var f = chip.getAttribute('data-filter');
+        cards.forEach(function (card) {
+          var show = (f === 'all' || card.getAttribute('data-cat') === f);
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    });
+
+    // ---- Reveal on scroll ----
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && 'IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+    }
+  })();
+</script>
+</body>
+</html>
