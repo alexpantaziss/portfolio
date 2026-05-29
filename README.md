@@ -1,4 +1,4 @@
-# Alexandros Pantazis — Personal Portfolio
+# Alexandros Pantazis - Personal Portfolio
 
 Personal portfolio website of **Alexandros Pantazis**, MSc Environment Engineer, Project Manager & GIS Analyst, specializing in remote sensing, the water–energy nexus, and renewable energy systems.
 
