@@ -2,7 +2,7 @@
 
 Personal portfolio website of **Alexandros Pantazis**, MSc Environment Engineer, Project Manager & GIS Analyst, specializing in remote sensing, the water–energy nexus, and renewable energy systems.
 
-🌐 **Live site:** https://alexpantaziss.github.io
+🌐 **Live site:** [https://alexpantaziss.github.io](https://alexpantaziss.github.io/portfolio/)
 ---
 
 ## About
