@@ -433,6 +433,32 @@
   }
   .foot-bottom .langs { display: flex; gap: var(--space-3); }
 
+  /* ============ CV MODAL ============ */
+  .cv-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: var(--space-3); }
+  .cv-modal[hidden] { display: none; }
+  .cv-modal-backdrop { position: absolute; inset: 0; background: rgba(9, 9, 11, .65); backdrop-filter: blur(4px); }
+  .cv-modal-panel {
+    position: relative; display: flex; flex-direction: column;
+    width: min(900px, 100%); height: min(88vh, 1100px);
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius); box-shadow: var(--shadow-lg); overflow: hidden;
+  }
+  .cv-modal-head {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+    padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border);
+  }
+  .cv-modal-head .t { font-family: var(--font-head); font-weight: 600; font-size: .95rem; }
+  .cv-modal-actions { display: flex; align-items: center; gap: var(--space-2); }
+  .cv-modal-dl { font-family: var(--font-head); font-weight: 600; font-size: .85rem; color: var(--color-accent); }
+  .cv-modal-dl:hover { text-decoration: underline; }
+  .cv-modal-close {
+    width: 34px; height: 34px; display: grid; place-items: center;
+    border: 1px solid var(--color-border); border-radius: var(--radius);
+    background: transparent; color: var(--color-foreground); font-size: 1.2rem; line-height: 1; cursor: pointer;
+  }
+  .cv-modal-close:hover { background: var(--color-muted); }
+  .cv-modal-panel iframe { flex: 1; width: 100%; border: 0; background: var(--color-muted); }
+
   /* reveal-on-scroll */
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
   .reveal.in { opacity: 1; transform: none; }
@@ -524,7 +550,7 @@
         <a class="btn btn-ghost" href="mailto:pantazisalex@outlook.com">Get in touch
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
         </a>
-        <a class="btn btn-ghost" href="Panntazis Alexandros - Project Manager - CV.pdf" download>Download CV
+        <a class="btn btn-ghost" id="cvBtn" href="Panntazis Alexandros - Project Manager - CV.pdf" download>Download CV
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </a>
       </div>
@@ -1000,6 +1026,21 @@
   </div>
 </footer>
 
+<!-- ========== CV MODAL ========== -->
+<div class="cv-modal" id="cvModal" role="dialog" aria-modal="true" aria-label="Curriculum vitae preview" hidden>
+  <div class="cv-modal-backdrop" data-cv-close></div>
+  <div class="cv-modal-panel">
+    <div class="cv-modal-head">
+      <span class="t">Curriculum Vitae</span>
+      <div class="cv-modal-actions">
+        <a class="cv-modal-dl" href="Panntazis Alexandros - Project Manager - CV.pdf" download>Download PDF</a>
+        <button class="cv-modal-close" type="button" aria-label="Close preview" data-cv-close>&times;</button>
+      </div>
+    </div>
+    <iframe title="CV preview" data-src="https://1drv.ms/b/c/6a2ed2ddd4fb447c/IQTcGzBY_8qDT4-JgMAfIluXATA88SNyAjFR4Jxu9u4Lb2k"></iframe>
+  </div>
+</div>
+
 <script>
   (function () {
     // ---- Theme: respect stored choice, else system preference ----
@@ -1109,6 +1150,30 @@
         });
       });
     });
+
+    // ---- CV modal (OneDrive PDF preview) ----
+    var cvBtn = document.getElementById('cvBtn');
+    var cvModal = document.getElementById('cvModal');
+    if (cvBtn && cvModal) {
+      var cvFrame = cvModal.querySelector('iframe');
+      var closeCv = function () {
+        cvModal.hidden = true;
+        document.body.style.overflow = '';
+      };
+      cvBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        // load the OneDrive viewer only on first open
+        if (!cvFrame.src) cvFrame.src = cvFrame.getAttribute('data-src');
+        cvModal.hidden = false;
+        document.body.style.overflow = 'hidden';
+      });
+      cvModal.querySelectorAll('[data-cv-close]').forEach(function (el) {
+        el.addEventListener('click', closeCv);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !cvModal.hidden) closeCv();
+      });
+    }
 
     // ---- Reveal on scroll ----
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
