@@ -1272,28 +1272,48 @@
     function draw() {
       ctx.clearRect(0, 0, width, height);
 
-      const style = getComputedStyle(document.body);
-      const lineColor = style.getPropertyValue('--color-foreground').trim() || '#09090B';
+      // Έλεγχος για dark/light theme για σωστή αντίθεση στο χάρτη
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const lineColor = isDark ? '#A1A1AA' : '#3F3F46'; // Πιο έντονο γκρι για το light mode
 
       ctx.strokeStyle = lineColor;
-      ctx.lineWidth = 1;
-      ctx.globalAlpha = 0.15; // Subtle watermark opacity
+      // Αυξημένο opacity για να φαίνεται καλύτερα το background
+      ctx.globalAlpha = isDark ? 0.25 : 0.35;
+      ctx.lineJoin = 'round';
 
-      // Shift mountain peak slightly right to frame text
-      let cx = width * 0.7;
+      // Τοποθέτηση της κεντρικής "κορυφής" του χάρτη (δεξιά πλευρά)
+      let cx = width * 0.75;
       let cy = height * 0.5;
       let maxR = Math.max(width, height) * 1.2;
 
       let elevations = [];
       for(let e = 1; e < 65; e++) {
-        elevations.push(Math.pow(e, 1.4) * 4);
+        // Αποθηκεύουμε την ακτίνα και το επίπεδο για να ξέρουμε ποιες είναι οι "κύριες" ισουψείς
+        elevations.push({ r: Math.pow(e, 1.4) * 4, level: e });
       }
 
-      elevations.forEach((r) => {
+      // Ρυθμίσεις γραμματοσειράς για τα νούμερα του υψομέτρου
+      ctx.font = "600 10px 'Open Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      elevations.forEach((item) => {
+        let r = item.r;
+        let e = item.level;
         if (r > maxR) return;
+
+        // Δημιουργία Κύριων Ισουψών (κάθε 5 επίπεδα, όπως στους πραγματικούς χάρτες)
+        const isMajorContour = e % 5 === 0;
+        ctx.lineWidth = isMajorContour ? 1.5 : 0.5;
+
         ctx.beginPath();
 
+        let labelPos = null;
+        // Διαφοροποίηση της γωνίας που μπαίνει η ετικέτα για να μην είναι όλα σε μια ευθεία (δημιουργεί σπιράλ)
+        let labelAngle = Math.PI * 1.1 + (e * 0.08);
+
         for (let a = 0; a <= Math.PI * 2.05; a += 0.05) {
+          // Δημιουργία τυχαίας μορφολογίας (κορυφογραμμές κτλ)
           let ridge1 = Math.sin(a * 4) * 0.4;
           let ridge2 = Math.cos(a * 7 + 1) * 0.2;
           let ridge3 = Math.sin(a * 11) * 0.1;
@@ -1301,12 +1321,14 @@
           let totalRidge = (ridge1 + ridge2 + ridge3) * (r * 0.18);
           let bx = cx + Math.cos(a) * r;
           let by = cy + Math.sin(a) * r;
+          // Κίνηση με το χρόνο (erosion)
           let erosion = Math.sin(bx * 0.005 + time*0.1) * Math.cos(by * 0.005) * (r * 0.08);
 
           let finalR = r + totalRidge + erosion;
           let nx = cx + Math.cos(a) * finalR;
           let ny = cy + Math.sin(a) * finalR;
 
+          // Αλληλεπίδραση με το ποντίκι
           const dx = nx - mouse.x;
           const dy = ny - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
@@ -1318,11 +1340,45 @@
 
           if (a === 0) ctx.moveTo(nx, ny);
           else ctx.lineTo(nx, ny);
+
+          // Εύρεση σημείου για να τοποθετηθεί ο αριθμός υψομέτρου
+          if (isMajorContour && !labelPos && a >= labelAngle) {
+             // Αποθηκεύουμε συντεταγμένες και υπολογίζουμε τη γωνία για την περιστροφή του κειμένου
+             labelPos = { x: nx, y: ny, angle: a + Math.PI/2 };
+          }
         }
         ctx.stroke();
+
+        // Σχεδιασμός ετικέτας υψομέτρου στις κύριες γραμμές
+        if (isMajorContour && labelPos) {
+          ctx.save();
+
+          // Το κείμενο να έχει το χρώμα της γραμμής αλλά να είναι ελαφρώς πιο έντονο (λιγότερο διάφανο)
+          ctx.fillStyle = lineColor;
+          ctx.globalAlpha = isDark ? 0.7 : 0.9;
+
+          // Υπολογισμός "εικονικού υψομέτρου" (ξεκινάει από 1200m και μειώνεται)
+          let elevationValue = 1200 - (e * 10);
+
+          ctx.translate(labelPos.x, labelPos.y);
+
+          // Περιστροφή κειμένου ώστε να ακολουθεί την τοπογραφική καμπύλη
+          let textAngle = labelPos.angle;
+          // Αν το κείμενο γυρίσει ανάποδα (ώστε να διαβάζεται δύσκολα), το φέρνουμε στα ίσια του
+          if (textAngle > Math.PI / 2 && textAngle < (3 * Math.PI) / 2) {
+             textAngle -= Math.PI;
+          }
+          ctx.rotate(textAngle);
+
+          // Καθαρισμός του background πίσω από το νούμερο (δημιουργία κενού/halo effect)
+          ctx.clearRect(-14, -8, 28, 16);
+
+          ctx.fillText(elevationValue, 0, 0);
+          ctx.restore();
+        }
       });
 
-      time += 0.005;
+      time += 0.003; // Ελαφρώς πιο αργή κίνηση για να διαβάζονται οι αριθμοί εύκολα
       requestAnimationFrame(draw);
     }
     draw();
