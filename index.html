@@ -7,11 +7,11 @@
 <meta name="description" content="Alexandros Pantazis - Project Manager in EU Funded Programmes (LIFE, EUI, Horizon Europe) with deep GIS and remote sensing expertise in climate resilience and energy transition." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M10,58 C10,32 32,10 58,10 C76,10 90,21 90,34 C90,65 79,90 66,90 C35,90 10,76 10,58 Z' fill='none' stroke='%2318181B' stroke-width='6'/><text x='49' y='67' font-family='system-ui, sans-serif' font-weight='bold' font-size='44' fill='%2318181B' text-anchor='middle'>AP</text></svg>" media="(prefers-color-scheme: light)" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M10,58 C10,32 32,10 58,10 C76,10 90,21 90,34 C90,65 79,90 66,90 C35,90 10,76 10,58 Z' fill='none' stroke='%23FAFAFA' stroke-width='6'/><text x='49' y='67' font-family='system-ui, sans-serif' font-weight='bold' font-size='44' fill='%23FAFAFA' text-anchor='middle'>AP</text></svg>" media="(prefers-color-scheme: dark)" />
+<!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3d0704fb9c9d4209a6f37bb6c0afa3db"}'></script>
-<!-- End Cloudflare Web Analytics -->
 <style>
   /* ============ DESIGN TOKENS - Swiss Modernism 2.0 ============ */
   :root {
@@ -30,6 +30,7 @@
 
     --font-head: "Poppins", system-ui, sans-serif;
     --font-body: "Open Sans", system-ui, sans-serif;
+    --font-mono: "Fira Code", monospace;
 
     /* 8pt spacing rhythm */
     --space-1: 0.5rem;  --space-2: 1rem;   --space-3: 1.5rem;
@@ -230,6 +231,7 @@
   .hero { padding: var(--space-12) 0 var(--space-8); position: relative; overflow: hidden; }
   .hero-grid-bg {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    opacity: 0; transition: opacity 1.2s var(--ease);
   }
   #topo-canvas {
     position: absolute; inset: 0; width: 100%; height: 100%;
@@ -250,6 +252,38 @@
     margin: var(--space-3) 0 var(--space-2);
   }
   .hero h1 .accent { color: var(--color-accent); }
+  .headline-container {
+    min-height: clamp(9rem, 17vw, 12rem);
+    display: flex; align-items: flex-start;
+    margin: var(--space-3) 0 var(--space-2);
+  }
+  #typewriter-container {
+    font-family: var(--font-mono);
+    font-size: clamp(1.05rem, 2.4vw, 1.6rem);
+    font-weight: 400; line-height: 1.55;
+    white-space: pre-wrap; color: var(--color-secondary);
+    min-height: 100%;
+  }
+  #script-text { display: inline; }
+  .cursor {
+    display: inline-block; width: .6em; height: 1.2em;
+    margin-left: .1em; vertical-align: -.15em;
+    background: var(--color-accent); animation: cursorBlink .85s steps(1) infinite;
+  }
+  .final-headline { display: none; margin: 0; }
+  .glitch-flash { animation: glitchFlash .3s steps(2, end); }
+  @keyframes cursorBlink { 50% { opacity: 0; } }
+  @keyframes glitchFlash {
+    0% { transform: translate(0); filter: none; }
+    20% { transform: translate(-2px, 1px); filter: contrast(1.4); }
+    45% { transform: translate(3px, -1px); color: var(--color-accent); }
+    70% { transform: translate(-1px, 2px); }
+    100% { transform: translate(0); filter: none; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
   .hero .role {
     font-family: var(--font-head); font-weight: 500;
     font-size: clamp(1.1rem, 2.6vw, 1.6rem); color: var(--color-secondary); letter-spacing: -.01em;
@@ -502,7 +536,7 @@
       <span class="brand-name">Alexandros&nbsp;Pantazis</span>
     </a>
 
-    <!-- ===== TUBELIGHT NAVBAR (replaces the old .nav-links) ===== -->
+    <!-- ===== TUBELIGHT NAVBAR ===== -->
     <nav class="tubelight-pill" id="tubelight" aria-label="Primary">
       <span class="lamp" id="lamp" aria-hidden="true"><span class="lamp-bar"><span class="g1"></span><span class="g2"></span><span class="g3"></span></span></span>
 
@@ -536,13 +570,18 @@
 <main id="top">
 
   <!-- ========== HERO ========== -->
-  <section class="hero section--plain" id="home">
-    <div class="hero-grid-bg" aria-hidden="true">
+  <section class="hero" id="home">
+    <div class="hero-grid-bg" id="topo-bg" aria-hidden="true">
       <canvas id="topo-canvas"></canvas>
     </div>
     <div class="wrap">
       <img class="hero-portrait" src="profile.png" alt="Alexandros Pantazis – Project Manager, EU Funded Programmes and GIS specialist" />
-      <h1>Mapping the<br><span class="accent">climate crisis</span> into action.</h1>
+      <div class="headline-container" id="headlineBox">
+        <div id="typewriter-container">
+          <span id="script-text"></span><span class="cursor"></span>
+        </div>
+        <h1 class="final-headline" id="finalHeadline">Mapping the<br><span class="accent">climate crisis</span> into action.</h1>
+      </div>
       <p class="role">Project Manager · EU Funded Programmes | GIS &amp; Remote Sensing</p>
       <p class="lede">I use GIS and remote sensing to solve real environmental problems, from urban heat and air quality to fire risk and transport logistics, and manage EU-funded projects in energy transition and climate resilience at SDA (Sustainable Development Advisory).</p>
       <div class="hero-cta">
@@ -557,7 +596,7 @@
         </a>
       </div>
 
-      <div class="stats reveal">
+      <div class="stats reveal" style="opacity: 0; animation: fadeUp 1s ease forwards; animation-delay: 3.6s;">
         <div class="stat"><div class="v">6</div><div class="l">EU-funded projects managed or contributed to</div></div>
         <div class="stat"><div class="v">10+</div><div class="l">GIS projects developed</div></div>
         <div class="stat"><div class="v">6</div><div class="l">Conference presentations as speaker</div></div>
@@ -805,17 +844,7 @@
     </div>
   </section>
 
-  <!-- ========== EU PROJECTS (disabled) ========== -->
-  <!--
-       This "Funded research" section is currently turned OFF on the site.
-       A full standalone copy lives in funded-research.html.
-
-       TO RE-ENABLE IT HERE:
-         1. Delete the line below that reads:  EU-SECTION-OFF-START
-         2. Delete the line further down that reads:  EU-SECTION-OFF-END
-         3. (Optional) Un-comment the nav link in the header:
-            <a href="#eu">EU&nbsp;Projects</a>
-  -->
+  <!-- ========== EU PROJECTS ========== -->
   <section class="section" id="eu">
     <div class="wrap">
       <div class="section-head reveal">
@@ -876,7 +905,7 @@
           </div>
         </div>
         <div class="li-card reveal" data-program="life">
-          <div class="top"><h3>CEOS</h3><span class="ga">LIDE</span></div>
+          <div class="top"><h3>CEOS</h3><span class="ga">LIFE23-CET</span></div>
           <p>The City Energy Optimisation Solutions project enhances energy efficiency across municipal infrastructures, focusing on facilities such as pump stations.</p>
           <div class="card-link-row">
             <a class="btn btn-ghost btn-sm" href="https://build-up.ec.europa.eu/en/resources-and-tools/links/life23-cet-ceos-project" target="_blank" rel="noopener">Learn more
@@ -1229,17 +1258,87 @@
         // reduced motion (or no observer): leave the final values untouched
       } else {
         var statsBar = statVals[0].closest('.stats');
+        var statsReady = false;
+        var statsInView = false;
+        var statsAnimated = false;
+
+        function runStatsWhenReady() {
+          if (statsAnimated || !statsReady || !statsInView) return;
+          statsAnimated = true;
+          statVals.forEach(function (el, i) { animateStat(el, i * 300); });
+        }
+
+        window.addEventListener('hero:headline-revealed', function () {
+          statsReady = true;
+          runStatsWhenReady();
+        }, { once: true });
+
         var statsIO = new IntersectionObserver(function (entries, obs) {
           entries.forEach(function (en) {
             if (!en.isIntersecting) return;
-            obs.unobserve(en.target); // run once
-            statVals.forEach(function (el, i) { animateStat(el, i * 300); }); // 300ms stagger
+            statsInView = true;
+            obs.unobserve(en.target);
+            runStatsWhenReady();
           });
         }, { threshold: 0.4 });
         statsIO.observe(statsBar);
       }
     }
   })();
+
+  // ---- Hero typewriter: script to topography ----
+  const scriptTextElement = document.getElementById('script-text');
+  const typewriterContainer = document.getElementById('typewriter-container');
+  const finalHeadline = document.getElementById('finalHeadline');
+  const headlineBox = document.getElementById('headlineBox');
+  const topoBg = document.getElementById('topo-bg');
+
+  const codeLines = [
+    "import ee\n",
+    "ee.Initialize()\n",
+    "def analyze_crisis():\n",
+    "  return transform(data='climate', to='action')\n",
+    "> executing..."
+  ];
+
+  let currentLineIndex = 0;
+  let currentCharIndex = 0;
+
+  function revealHeroHeadline() {
+    if (headlineBox) headlineBox.classList.add('glitch-flash');
+    if (typewriterContainer) typewriterContainer.style.display = 'none';
+    if (finalHeadline) finalHeadline.style.display = 'block';
+    if (topoBg) topoBg.style.opacity = '1';
+    window.dispatchEvent(new Event('hero:headline-revealed'));
+
+    setTimeout(() => {
+      if (headlineBox) headlineBox.classList.remove('glitch-flash');
+    }, 300);
+  }
+
+  function typeWriter() {
+    if (!scriptTextElement || !typewriterContainer || !finalHeadline) return;
+
+    if (currentLineIndex < codeLines.length) {
+      if (currentCharIndex < codeLines[currentLineIndex].length) {
+        scriptTextElement.textContent += codeLines[currentLineIndex].charAt(currentCharIndex);
+        currentCharIndex++;
+        setTimeout(typeWriter, Math.random() * 30 + 20);
+      } else {
+        currentLineIndex++;
+        currentCharIndex = 0;
+        setTimeout(typeWriter, 300);
+      }
+    } else {
+      setTimeout(revealHeroHeadline, 600);
+    }
+  }
+
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealHeroHeadline();
+  } else {
+    setTimeout(typeWriter, 500);
+  }
 
   // ---- Topographic Mountain Contours Background ----
   (function initTopography() {
