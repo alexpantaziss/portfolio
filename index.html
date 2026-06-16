@@ -13,7 +13,7 @@
 <!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "3d0704fb9c9d4209a6f37bb6c0afa3db"}'></script>
 <style>
-  /* ============ DESIGN TOKENS - Swiss Modernism 2.0 ============ */
+  /* ============ DESIGN TOKENS ============ */
   :root {
     --color-primary: #18181B;
     --color-on-primary: #FFFFFF;
@@ -169,9 +169,7 @@
   .card-link-row .btn:hover svg { transform: translateX(3px); }
   .menu-toggle { display: none; }
 
-  /* ============ TUBELIGHT NAVBAR (replaces center nav-links) ============ */
-  /* Mobile: docks to the bottom of the viewport (icon mode).
-     >=640px: sits centred inside the sticky header (text mode). */
+  /* ============ TUBELIGHT NAVBAR ============ */
   .tubelight-pill {
     position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
     margin-bottom: 1.1rem; z-index: 120;
@@ -203,7 +201,6 @@
     .t-item .label { display: inline; }
     .t-item .ico { display: none; }
   }
-  /* the sliding "lamp" (vanilla replacement for framer-motion layoutId) */
   .lamp {
     position: absolute; top: 0; left: 0; height: 100%; z-index: 0; width: 0;
     background: color-mix(in srgb, var(--color-accent) 10%, transparent);
@@ -218,13 +215,11 @@
     background: color-mix(in srgb, var(--color-accent) 22%, transparent); border-radius: 9999px; filter: blur(12px); }
   .lamp-bar .g3 { position: absolute; width: 1rem; height: 1rem; top: 0; left: .5rem;
     background: color-mix(in srgb, var(--color-accent) 22%, transparent); border-radius: 9999px; filter: blur(6px); }
-  /* on mobile (pill docked at bottom) flip the glow so it points downward */
   @media (max-width: 639px) {
     .lamp-bar { top: auto; bottom: -6px; border-radius: 0 0 9999px 9999px; }
     .lamp-bar .g1, .lamp-bar .g2, .lamp-bar .g3 { top: auto; bottom: -.5rem; }
   }
   @media (prefers-reduced-motion: reduce) { .lamp { transition: none; } }
-  /* hide brand wordmark below desktop so the centred pill never overlaps the brand */
   @media (max-width: 1023px) { .brand .brand-name { display: none; } }
 
   /* ============ HERO ============ */
@@ -368,7 +363,6 @@
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; z-index: 0;
   }
-  /* keep the category label readable on top of a photo */
   .card-visual:has(.card-photo) .card-cat { z-index: 2; }
   .card-visual:has(.card-photo)::after {
     content: ""; position: absolute; inset: 0; z-index: 1;
@@ -383,7 +377,6 @@
     box-shadow: var(--shadow-md); margin-bottom: var(--space-3);
   }
 
-  /* Generic responsive image helper for anywhere you want to drop a photo */
   .photo {
     display: block; width: 100%; height: auto;
     border-radius: var(--radius); box-shadow: var(--shadow-sm);
@@ -1074,7 +1067,7 @@
 
 <script>
   (function () {
-    // ---- Theme: respect stored choice, else system preference ----
+    // ---- Theme ----
     var root = document.documentElement;
     var stored = null;
     try { stored = localStorage.getItem('theme'); } catch (e) {}
@@ -1088,7 +1081,7 @@
       try { localStorage.setItem('theme', next); } catch (e) {}
     });
 
-    // ---- Tubelight navbar (sliding lamp + scroll-spy) ----
+    // ---- Tubelight navbar ----
     var tnav = document.getElementById('tubelight');
     var lamp = document.getElementById('lamp');
     var tItems = [].slice.call(tnav.querySelectorAll('.t-item'));
@@ -1111,16 +1104,13 @@
       el.addEventListener('click', function (e) {
         var id = el.getAttribute('data-target');
         if (id && document.getElementById(id)) { e.preventDefault(); setActive(el, true); }
-        // items without an in-page target (e.g. Map) just navigate normally
       });
     });
-    // scroll-spy: light up the tab whose section is in view
     var spy = tItems.map(function (el) { return document.getElementById(el.getAttribute('data-target')); }).filter(Boolean);
     if ('IntersectionObserver' in window && spy.length) {
       var visible = {};
       var spyIO = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) { visible[en.target.id] = en.isIntersecting; });
-        // pick the topmost section currently crossing the viewport's middle line
         var current = spy.filter(function (s) { return visible[s.id]; })
                          .sort(function (a, b) { return a.offsetTop - b.offsetTop; })[0];
         if (current) {
@@ -1130,7 +1120,6 @@
       }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
       spy.forEach(function (s) { spyIO.observe(s); });
     }
-    // position the lamp initially and keep it correct on resize (no animation while resizing)
     function initLamp() { moveLamp(tnav.querySelector('.t-item.active') || tItems[0]); }
     window.addEventListener('load', initLamp);
     window.addEventListener('resize', function () {
@@ -1182,7 +1171,7 @@
       });
     });
 
-    // ---- CV modal (OneDrive PDF preview) ----
+    // ---- CV modal ----
     var cvBtn = document.getElementById('cvBtn');
     var cvModal = document.getElementById('cvModal');
     if (cvBtn && cvModal) {
@@ -1193,7 +1182,6 @@
       };
       cvBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        // load the OneDrive viewer only on first open
         if (!cvFrame.src) cvFrame.src = cvFrame.getAttribute('data-src');
         cvModal.hidden = false;
         document.body.style.overflow = 'hidden';
@@ -1221,7 +1209,6 @@
 
     // ---- Animated count-up for hero stats ----
     var statVals = [].slice.call(document.querySelectorAll('.stats .stat .v'));
-    // Parse each value into { prefix, target, decimals, suffix } so we can rebuild it every frame.
     function parseStat(text) {
       var m = text.match(/-?\d+(?:\.\d+)?/);
       if (!m) return null;
@@ -1237,26 +1224,27 @@
     function renderStat(p, value) {
       return p.prefix + value.toFixed(p.decimals) + p.suffix;
     }
-    function animateStat(el, delay) {
-      var p = parseStat(el.textContent.trim());
+    function animateStat(el, p, delay) {
       if (!p) return;
       var DURATION = 3000;
       var start = null;
-      el.textContent = renderStat(p, 0); // start from zero, keeping prefix/suffix
+      el.textContent = renderStat(p, 0);
       function frame(now) {
         if (start === null) start = now;
         var t = Math.min((now - start) / DURATION, 1);
-        var eased = 1 - Math.pow(1 - t, 3); // ease-out cubic: fast start, slow finish
+        var eased = 1 - Math.pow(1 - t, 3);
         el.textContent = renderStat(p, p.target * eased);
         if (t < 1) requestAnimationFrame(frame);
-        else el.textContent = renderStat(p, p.target); // snap to exact final value
+        else el.textContent = renderStat(p, p.target);
       }
       setTimeout(function () { requestAnimationFrame(frame); }, delay);
     }
     if (statVals.length) {
       if (reduce || !('IntersectionObserver' in window)) {
-        // reduced motion (or no observer): leave the final values untouched
       } else {
+        var statData = statVals.map(function (el) { return parseStat(el.textContent.trim()); });
+        statVals.forEach(function (el, i) { if (statData[i]) el.textContent = renderStat(statData[i], 0); });
+
         var statsBar = statVals[0].closest('.stats');
         var statsReady = false;
         var statsInView = false;
@@ -1265,7 +1253,7 @@
         function runStatsWhenReady() {
           if (statsAnimated || !statsReady || !statsInView) return;
           statsAnimated = true;
-          statVals.forEach(function (el, i) { animateStat(el, i * 300); });
+          statVals.forEach(function (el, i) { animateStat(el, statData[i], i * 300); });
         }
 
         window.addEventListener('hero:headline-revealed', function () {
