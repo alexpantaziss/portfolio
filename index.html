@@ -565,6 +565,124 @@
   .cv-modal-close:hover { background: var(--color-muted); }
   .cv-modal-panel iframe { flex: 1; width: 100%; border: 0; background: var(--color-muted); }
 
+  /* ============ PRINTER (Print my CV) ============ */
+  .pr-modal { position: fixed; inset: 0; z-index: 210; display: grid; place-items: center; padding: var(--space-2); }
+  .pr-modal[hidden] { display: none; }
+  .pr-panel {
+    position: relative; width: min(440px, 100%); max-height: 100%; overflow: auto;
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius); box-shadow: var(--shadow-lg);
+    padding: var(--space-4) var(--space-3) var(--space-3); text-align: center;
+  }
+  .pr-panel .cv-modal-close { position: absolute; top: var(--space-2); right: var(--space-2); }
+  .pr-title { font-family: var(--font-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -.01em; margin-top: .4rem; }
+  .pr-stage { width: 260px; max-width: 100%; margin: var(--space-3) auto 0; }
+
+  /* paper output area: paper rises out of the top slot */
+  .pr-out { position: relative; z-index: 1; height: 250px; overflow: hidden; margin-bottom: -10px; }
+  .pr-paper {
+    position: absolute; bottom: 0; left: 50%; width: 196px; height: 240px; margin-left: -98px;
+    background: #FFFFFF; color: #18181B; text-align: left;
+    border: 1px solid #E4E4E7; border-bottom: 0; box-shadow: 0 2px 10px rgba(9,9,11,.10);
+    padding: 16px 14px; transform: translateY(100%); transform-origin: 50% 100%;
+  }
+  .pr-stage.is-printing .pr-paper { animation: pr-feed 3.4s linear forwards; }
+  .pr-stage.is-done .pr-paper { transform: translateY(0) rotate(-1.5deg); transition: transform .5s var(--ease); }
+  @keyframes pr-feed {
+    0%   { transform: translateY(100%); }
+    10%  { transform: translateY(88%); }  14% { transform: translateY(88%); }
+    24%  { transform: translateY(72%); }  28% { transform: translateY(72%); }
+    40%  { transform: translateY(54%); }  44% { transform: translateY(54%); }
+    56%  { transform: translateY(36%); }  60% { transform: translateY(36%); }
+    72%  { transform: translateY(18%); }  76% { transform: translateY(18%); }
+    100% { transform: translateY(0); }
+  }
+
+  /* mini CV printed on the sheet */
+  .cvp-head { display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 2px solid #2563EB; }
+  .cvp-head img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex: none; }
+  .cvp-name { font-family: var(--font-head); font-weight: 700; font-size: 10.5px; line-height: 1.15; }
+  .cvp-role { font-size: 6.5px; color: #52525B; line-height: 1.3; }
+  .cvp-h { font-family: var(--font-head); font-weight: 700; font-size: 6.5px; letter-spacing: .14em; text-transform: uppercase; color: #2563EB; margin: 9px 0 4px; }
+  .cvp-line { height: 3.5px; border-radius: 2px; background: #E4E4E7; margin: 3.5px 0; }
+  .cvp-line.dark { background: #A1A1AA; }
+  .cvp-map {
+    height: 34px; border-radius: 2px; margin-top: 6px;
+    background:
+      radial-gradient(circle at 30% 60%, #F97316 0 10%, transparent 26%),
+      radial-gradient(circle at 70% 35%, #FACC15 0 8%, transparent 24%),
+      linear-gradient(135deg, #DBEAFE, #BFDBFE);
+  }
+
+  /* printer body */
+  .pr-body {
+    position: relative; z-index: 2; height: 116px; border-radius: 16px 16px 10px 10px;
+    background: var(--color-primary); color: var(--color-on-primary);
+    box-shadow: var(--shadow-md), inset 0 -6px 0 rgba(0,0,0,.18);
+  }
+  .pr-lid {
+    position: absolute; top: -4px; left: 18px; right: 18px; height: 16px; border-radius: 8px;
+    background: var(--color-secondary);
+  }
+  .pr-lid::after {
+    content: ""; position: absolute; left: 12px; right: 12px; top: 5px; height: 5px; border-radius: 3px; background: rgba(0,0,0,.55);
+  }
+  .pr-front { position: absolute; left: 18px; right: 18px; top: 26px; display: flex; align-items: center; gap: 10px; }
+  /* LCD: backlit green panel inside a dark bezel */
+  .pr-bezel { flex: 1; padding: 4px; border-radius: 6px; background: #0A0A0B; box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
+  .pr-lcd {
+    position: relative; height: 40px; border-radius: 3px; padding: 5px 7px;
+    display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
+    background: linear-gradient(180deg, #C3DA8A 0%, #A5C266 100%);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,.28);
+    color: #1C2A0C; font-family: var(--font-mono); font-weight: 600; font-size: .62rem; letter-spacing: .08em;
+    text-align: left; white-space: nowrap;
+  }
+  .pr-lcd::after { /* faint pixel grid + glass glare */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(115deg, rgba(255,255,255,.28) 0 22%, transparent 22%),
+      repeating-linear-gradient(0deg, rgba(28,42,12,.06) 0 1px, transparent 1px 2px),
+      repeating-linear-gradient(90deg, rgba(28,42,12,.06) 0 1px, transparent 1px 2px);
+  }
+  .pr-lcd-row { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; line-height: 1; }
+  .pr-lcd-pct { font-variant-numeric: tabular-nums; }
+  .pr-lcd-msg { flex: 1; min-width: 0; overflow: hidden; }
+  .pr-lcd.is-scroll .pr-lcd-pct { display: none; }
+  .pr-lcd-scroll { display: inline-block; padding-left: 100%; animation: pr-marquee 4.5s linear 2; }
+  @keyframes pr-marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+  .pr-sub {
+    min-height: 1.5em; margin-top: .35rem; font-size: .92rem; color: var(--color-muted-fg);
+    opacity: 0; transform: translateY(4px); transition: opacity .4s var(--ease), transform .4s var(--ease);
+  }
+  .pr-sub.show { opacity: 1; transform: none; }
+  .pr-lcd-bar { display: flex; gap: 2px; height: 7px; }
+  .pr-lcd-bar i { flex: 1; background: rgba(28,42,12,.12); }
+  .pr-lcd-bar i.on { background: #1C2A0C; }
+  .pr-stage.is-warming .pr-lcd-msg::after { content: ""; animation: pr-dots 1s steps(4) infinite; }
+  @keyframes pr-dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  .pr-stage.is-done .pr-lcd { animation: pr-flash .5s steps(2) 2; }
+  @keyframes pr-flash { 50% { filter: brightness(1.15); } }
+  .pr-led { width: 9px; height: 9px; border-radius: 50%; background: #16A34A; box-shadow: 0 0 6px #16A34A; flex: none; }
+  .pr-stage.is-warming .pr-led, .pr-stage.is-printing .pr-led { background: #F59E0B; box-shadow: 0 0 8px #F59E0B; animation: pr-blink .5s steps(2) infinite; }
+  @keyframes pr-blink { 50% { opacity: .25; } }
+  .pr-knob { width: 14px; height: 14px; border-radius: 50%; flex: none; border: 2px solid color-mix(in srgb, var(--color-on-primary) 35%, transparent); }
+  .pr-tray {
+    position: absolute; left: 28px; right: 28px; bottom: 12px; height: 10px; border-radius: 0 0 6px 6px;
+    background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+  }
+  .pr-feet { display: flex; justify-content: space-between; padding: 0 26px; }
+  .pr-feet span { width: 26px; height: 6px; border-radius: 0 0 4px 4px; background: var(--color-secondary); }
+  .pr-stage.is-printing .pr-body { animation: pr-buzz .11s linear infinite; }
+  @keyframes pr-buzz { 0%,100% { transform: translate(0,0); } 25% { transform: translate(.7px,-.4px); } 75% { transform: translate(-.7px,.4px); } }
+
+  .pr-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-1); margin-top: var(--space-3);
+    opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .4s var(--ease), transform .4s var(--ease); }
+  .pr-stage.is-done + .pr-actions { opacity: 1; transform: none; pointer-events: auto; }
+  .pr-real { display: inline-block; margin-top: var(--space-2); background: none; border: 0; cursor: pointer;
+    font: 600 .8rem var(--font-head); color: var(--color-muted-fg); text-decoration: underline; text-underline-offset: 3px; }
+  .pr-real:hover { color: var(--color-accent); }
+
   /* reveal-on-scroll */
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
   .reveal.in { opacity: 1; transform: none; }
@@ -693,7 +811,7 @@
         <h1>Mapping the<br><span class="accent">climate crisis</span> into action.</h1>
       </div>
       <p class="role">Project Manager · EU Funded Programmes | GIS &amp; Remote Sensing</p>
-      <p class="lede">I use GIS and remote sensing to solve real environmental problems, from urban heat and air quality to fire risk and transport logistics, and manage EU-funded projects in energy transition and climate resilience at SDA (Sustainable Development Advisory).</p>
+      <p class="lede">I use GIS and remote sensing to solve real environmental problems, from urban heat and air quality to fire risk and transport logistics, and manage EU-funded projects in energy transition and climate resilience at SDA (Sustainable Development Advisory &amp; Engineering).</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#projects">View featured projects
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -701,9 +819,9 @@
         <a class="btn btn-ghost" href="mailto:pantazisalex@outlook.com">Get in touch
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
         </a>
-        <a class="btn btn-ghost" id="cvBtn" href="Pantazis Alexandros - Project Manager.pdf" download>Download CV
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        </a>
+        <button class="btn btn-ghost" id="printBtn" type="button">Print my CV
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        </button>
       </div>
 
       <div class="stats reveal" style="opacity: 0; animation: fadeUp 1s ease forwards; animation-delay: 3.6s;">
@@ -731,7 +849,7 @@
           </div>
         </div>
         <div class="body">
-          <p>I'm an environmental engineer and project manager working at the intersection of geospatial science and sustainable development. I currently manage EU-funded projects (Horizon Europe, LIFE, European Urban Initiative) at SDA, Sustainable Development Advisory, focused on energy transition and climate resilience for municipalities across Greece and Europe.</p>
+          <p>I'm an environmental engineer and project manager working at the intersection of geospatial science and sustainable development. I currently manage EU-funded projects (Horizon Europe, LIFE, European Urban Initiative) at SDA, Sustainable Development Advisory &amp; Engineering, focused on energy transition and climate resilience for municipalities across Greece and Europe.</p>
           <p>My project management is hands-on and technically informed: I coordinate international consortia, prepare deliverables and reports, and keep budgets and timelines on track, while still being the person who can open ArcGIS Pro and build the analysis myself.</p>
           <p>From heat-vulnerability mapping for the Municipality of Athens to optimizing school-bus fleets and building real-time air-quality observatories, I turn satellite data and spatial models into decisions that protect people and the environment.</p>
         </div>
@@ -896,7 +1014,7 @@
       <div class="timeline">
         <div class="tl-item reveal">
           <div class="tl-when">
-            <div class="org">SDA, Sustainable Development Advisory</div>
+            <div class="org">SDA, Sustainable Development Advisory &amp; Engineering</div>
             <div class="date">Jun 2026 - Present</div>
             <div class="badge-now">Current</div>
           </div>
@@ -1186,17 +1304,74 @@
 </footer>
 
 <!-- ========== CV MODAL ========== -->
-<div class="cv-modal" id="cvModal" role="dialog" aria-modal="true" aria-label="Curriculum vitae preview" hidden>
+<div class="pr-modal" id="prModal" role="dialog" aria-modal="true" aria-labelledby="prTitle" hidden>
+  <div class="cv-modal-backdrop" data-pr-close></div>
+  <div class="pr-panel">
+    <button class="cv-modal-close" type="button" aria-label="Close" data-pr-close>&times;</button>
+    <span class="eyebrow"><span class="num">Job #1</span> / Print queue</span>
+    <h3 class="pr-title" id="prTitle" aria-live="polite">Printing my CV…</h3>
+    <p class="pr-sub" id="prSub">Printing the only CV you'll need for this role.</p>
+
+    <div class="pr-stage" id="prStage" aria-hidden="true">
+      <div class="pr-out">
+        <div class="pr-paper">
+          <div class="cvp-head">
+            <img src="profile.png" alt="" />
+            <div>
+              <div class="cvp-name">Alexandros Pantazis</div>
+              <div class="cvp-role">Project Manager · EU Funded Programmes<br>GIS &amp; Remote Sensing</div>
+            </div>
+          </div>
+          <div class="cvp-h">Experience</div>
+          <div class="cvp-line dark" style="width:62%"></div>
+          <div class="cvp-line" style="width:94%"></div>
+          <div class="cvp-line" style="width:80%"></div>
+          <div class="cvp-line dark" style="width:48%"></div>
+          <div class="cvp-line" style="width:88%"></div>
+          <div class="cvp-h">GIS projects</div>
+          <div class="cvp-map"></div>
+          <div class="cvp-h">Education</div>
+          <div class="cvp-line dark" style="width:56%"></div>
+          <div class="cvp-line" style="width:76%"></div>
+        </div>
+      </div>
+      <div class="pr-body">
+        <div class="pr-lid"></div>
+        <div class="pr-front">
+          <span class="pr-led"></span>
+          <div class="pr-bezel">
+            <div class="pr-lcd" role="progressbar" aria-label="Print progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prLcd">
+              <div class="pr-lcd-row"><span class="pr-lcd-msg" id="prMsg">READY</span><span class="pr-lcd-pct" id="prPct">0%</span></div>
+              <div class="pr-lcd-bar" id="prBar"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <span class="pr-knob"></span>
+        </div>
+        <div class="pr-tray"></div>
+      </div>
+      <div class="pr-feet"><span></span><span></span></div>
+    </div>
+
+    <div class="pr-actions">
+      <button class="btn btn-primary btn-sm" type="button" id="prOpen">Open CV</button>
+      <a class="btn btn-ghost btn-sm" href="Alexandros Pantazis_MSc Environmental Engineer.pdf" download>Download PDF</a>
+      <button class="btn btn-ghost btn-sm" type="button" id="prAgain">Print again</button>
+    </div>
+    <button class="pr-real" type="button" id="prReal">…or send it to a real printer</button>
+  </div>
+</div>
+
+<div class="cv-modal" id="cvModal"role="dialog" aria-modal="true" aria-label="Curriculum vitae preview" hidden>
   <div class="cv-modal-backdrop" data-cv-close></div>
   <div class="cv-modal-panel">
     <div class="cv-modal-head">
       <span class="t">Curriculum Vitae</span>
       <div class="cv-modal-actions">
-        <a class="cv-modal-dl" href="Pantazis Alexandros - Project Manager.pdf" download>Download PDF</a>
+        <a class="cv-modal-dl" href="Alexandros Pantazis_MSc Environmental Engineer.pdf" download>Download PDF</a>
         <button class="cv-modal-close" type="button" aria-label="Close preview" data-cv-close>&times;</button>
       </div>
     </div>
-    <iframe title="CV preview" data-src="https://1drv.ms/b/c/6a2ed2ddd4fb447c/IQTgxhy6vHPWQJoQVw3KxtJdAeINX3ZytyiTJ69APNQq1ps" width="98" height="120" frameborder="0" scrolling="no"></iframe>
+    <iframe title="CV preview" data-src="Alexandros Pantazis_MSc Environmental Engineer.pdf"></iframe>
   </div>
 </div>
 
@@ -1310,25 +1485,123 @@
     });
 
     // ---- CV modal ----
-    var cvBtn = document.getElementById('cvBtn');
     var cvModal = document.getElementById('cvModal');
-    if (cvBtn && cvModal) {
+    var openCv = null;
+    if (cvModal) {
       var cvFrame = cvModal.querySelector('iframe');
       var closeCv = function () {
         cvModal.hidden = true;
         document.body.style.overflow = '';
       };
-      cvBtn.addEventListener('click', function (e) {
-        e.preventDefault();
+      openCv = function () {
         if (!cvFrame.src) cvFrame.src = cvFrame.getAttribute('data-src');
         cvModal.hidden = false;
         document.body.style.overflow = 'hidden';
-      });
+      };
       cvModal.querySelectorAll('[data-cv-close]').forEach(function (el) {
         el.addEventListener('click', closeCv);
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && !cvModal.hidden) closeCv();
+      });
+    }
+
+    // ---- Print my CV (printer illustration) ----
+    var printBtn = document.getElementById('printBtn');
+    var prModal = document.getElementById('prModal');
+    if (printBtn && prModal) {
+      var CV_PDF = 'Alexandros Pantazis_MSc Environmental Engineer.pdf';
+      var prStage = document.getElementById('prStage');
+      var prTitle = document.getElementById('prTitle');
+      var prPaper = prStage.querySelector('.pr-paper');
+      var prLcd = document.getElementById('prLcd');
+      var prMsg = document.getElementById('prMsg');
+      var prPct = document.getElementById('prPct');
+      var prSegs = document.getElementById('prBar').children;
+      var FEED_MS = 3400; // keep in sync with the pr-feed animation duration
+      var prTimers = [];
+      var prRaf = 0;
+      var clearPr = function () {
+        prTimers.forEach(clearTimeout); prTimers = [];
+        cancelAnimationFrame(prRaf);
+      };
+      var prSub = document.getElementById('prSub');
+      var setLcd = function (msg, pct) {
+        prLcd.classList.remove('is-scroll');
+        prMsg.textContent = msg;
+        prPct.textContent = pct + '%';
+        prLcd.setAttribute('aria-valuenow', pct);
+        var lit = Math.round(pct / 100 * prSegs.length);
+        for (var i = 0; i < prSegs.length; i++) prSegs[i].classList.toggle('on', i < lit);
+      };
+      var tickProgress = function (start) {
+        var pct = Math.min(99, Math.floor((performance.now() - start) / FEED_MS * 100));
+        setLcd('PRINTING 1/1', pct);
+        prRaf = requestAnimationFrame(function () { tickProgress(start); });
+      };
+
+      var runPrint = function () {
+        clearPr();
+        prStage.classList.remove('is-warming', 'is-printing', 'is-done');
+        void prStage.offsetWidth; // restart animations
+        prTitle.textContent = 'Printing my CV…';
+        prSub.classList.remove('show');
+        setLcd('WARMING UP', 0);
+        prStage.classList.add('is-warming');
+        prTimers.push(setTimeout(function () {
+          prStage.classList.remove('is-warming');
+          prStage.classList.add('is-printing');
+          prSub.classList.add('show');
+          tickProgress(performance.now());
+        }, 900));
+      };
+      prPaper.addEventListener('animationend', function () {
+        cancelAnimationFrame(prRaf);
+        prStage.classList.remove('is-printing');
+        prStage.classList.add('is-done');
+        setLcd('DONE ✓', 100);
+        prTitle.textContent = 'Fresh off the press.';
+        prSub.classList.remove('show');
+        // after a beat, scroll the punchline across the LCD, then settle back on DONE
+        prTimers.push(setTimeout(function () {
+          var s = document.createElement('span');
+          s.className = 'pr-lcd-scroll';
+          s.textContent = 'NO OTHER CVS NEEDED ✓';
+          prMsg.textContent = '';
+          prMsg.appendChild(s);
+          prLcd.classList.add('is-scroll');
+          s.addEventListener('animationend', function () { setLcd('DONE ✓', 100); });
+        }, 1200));
+      });
+
+      var closePr = function () {
+        clearPr();
+        prModal.hidden = true;
+        document.body.style.overflow = '';
+      };
+      printBtn.addEventListener('click', function () {
+        prModal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        runPrint();
+      });
+      prModal.querySelectorAll('[data-pr-close]').forEach(function (el) { el.addEventListener('click', closePr); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !prModal.hidden) closePr(); });
+      document.getElementById('prAgain').addEventListener('click', runPrint);
+      document.getElementById('prOpen').addEventListener('click', function () {
+        closePr();
+        if (openCv) openCv();
+      });
+      // Real printer: open the browser print dialog for the local PDF
+      document.getElementById('prReal').addEventListener('click', function () {
+        var f = document.createElement('iframe');
+        f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+        f.src = CV_PDF;
+        f.onload = function () {
+          try { f.contentWindow.focus(); f.contentWindow.print(); }
+          catch (err) { window.open(CV_PDF, '_blank'); }
+          setTimeout(function () { f.remove(); }, 60000);
+        };
+        document.body.appendChild(f);
       });
     }
 
